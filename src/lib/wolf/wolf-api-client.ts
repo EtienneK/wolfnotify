@@ -1,18 +1,25 @@
+import fs from 'node:fs'
 import { fetch, Agent, Response, type RequestInit } from 'undici'
 import type { paths } from './wolf-api-schema.js'
 
 export default class WolfApiClient {
+  readonly socketPath: string
   private readonly fetch: (path: keyof paths, init?: RequestInit) => Promise<Response>
 
-  constructor (socketPath: string) {
+  constructor (socketDir: string, socketName: string) {
+    this.socketPath = `${socketDir}/${socketName}`
     this.fetch = (path, init) => fetch(`http://localhost${path}`, {
       dispatcher: new Agent({
         connect: {
-          socketPath
+          socketPath: this.socketPath
         }
       }),
       ...init
     })
+  }
+
+  socketExists () {
+    return fs.existsSync(this.socketPath)
   }
 
   getPendingPairRequests () {

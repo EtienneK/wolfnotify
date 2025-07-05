@@ -11,9 +11,14 @@ import WolfApiClient from './lib/wolf/wolf-api-client.js'
 let startup = true
 let pairSecretCache: Array<string> = []
 
-const wolfApiClient = new WolfApiClient(config.wolf.apiSocketPath)
+const wolfApiClient = new WolfApiClient(config.wolf.apiSocketDir, config.wolf.apiSocketName)
 
 async function cronjob () {
+  if (!wolfApiClient.socketExists()) {
+    console.error(`Wolf socket '${wolfApiClient.socketPath}' not found. Is the Wolf container still starting up? Have you mounted the Wolf API socket?`)
+    return
+  }
+
   const pendingPairRequests = await wolfApiClient.getPendingPairRequests()
   if (pendingPairRequests.success) {
     for (const pendingPairRequest of pendingPairRequests.requests) {
