@@ -27,6 +27,7 @@ export default {
         fs.mkdirSync(this.cachePath, { recursive: true })
         fs.writeFileSync(ntfyUrlCacheFile, ntfyUrl)
 
+        console.log()
         console.log('▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀')
         console.log(`  📢 Publishing pending pair requests to Ntfy URL:\n\t${ntfyUrl}`)
         console.log('▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄')
