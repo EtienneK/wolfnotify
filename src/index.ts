@@ -11,7 +11,7 @@ import WolfApiClient from './lib/wolf/wolf-api-client.js'
 let startup = true
 let pairSecretCache: Array<string> = []
 
-const wolfApiClient = new WolfApiClient(config.wolf.apiSocketDir, config.wolf.apiSocketName)
+const wolfApiClient = new WolfApiClient(config.wolf.apiSocketPath)
 
 async function cronjob () {
   if (!wolfApiClient.socketExists()) {

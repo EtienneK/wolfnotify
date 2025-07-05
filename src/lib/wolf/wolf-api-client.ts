@@ -3,11 +3,9 @@ import { fetch, Agent, Response, type RequestInit } from 'undici'
 import type { paths } from './wolf-api-schema.js'
 
 export default class WolfApiClient {
-  readonly socketPath: string
   private readonly fetch: (path: keyof paths, init?: RequestInit) => Promise<Response>
 
-  constructor (socketDir: string, socketName: string) {
-    this.socketPath = `${socketDir}/${socketName}`
+  constructor (public readonly socketPath: string) {
     this.fetch = (path, init) => fetch(`http://localhost${path}`, {
       dispatcher: new Agent({
         connect: {
