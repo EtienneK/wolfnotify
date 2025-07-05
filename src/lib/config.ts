@@ -1,4 +1,3 @@
-// @ts-types="npm:@types/config"
 import nodeConfig from 'config'
 import { z } from 'zod'
 import type { DeepReadonly } from '../types/types.js'

@@ -13,5 +13,6 @@ export default {
     ntfy: {
       url: 'NTFY_URL'
     }
-  }
+  },
+  cachePath: 'CACHE_PATH'
 }

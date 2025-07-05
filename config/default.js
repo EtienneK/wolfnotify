@@ -1,3 +1,4 @@
+import fs from 'node:fs'
 import { nanoid } from 'nanoid'
 import { deferConfig } from 'config/defer.js'
 
@@ -17,8 +18,23 @@ export default {
   handlers: {
     ntfy: {
       url: deferConfig(function () {
-        return `https://ntfy.sh/${nanoid()}`
+        const ntfyUrlCacheFile = `${this.cachePath}/ntfy-url`
+        if (fs.existsSync(ntfyUrlCacheFile)) {
+          return fs.readFileSync(ntfyUrlCacheFile).toString()
+        }
+
+        const ntfyUrl = `https://ntfy.sh/${nanoid()}`
+        fs.mkdirSync(this.cachePath, { recursive: true })
+        fs.writeFileSync(ntfyUrlCacheFile, ntfyUrl)
+
+        console.log('▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀')
+        console.log(`  📢 Publishing pending pair requests to Ntfy URL:\n\t${ntfyUrl}`)
+        console.log('▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄')
+        console.log()
+
+        return ntfyUrl
       })
     }
-  }
+  },
+  cachePath: './cache'
 }
