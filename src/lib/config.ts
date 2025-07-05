@@ -15,7 +15,9 @@ const ConfigSchema = z.object({
   }),
   handlers: z.object({
     ntfy: z.object({
-      url: z.string().url()
+      url: z.string().url(),
+      username: z.string().optional(),
+      password: z.string().optional(),
     })
   })
 })

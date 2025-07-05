@@ -11,7 +11,9 @@ export default {
   },
   handlers: {
     ntfy: {
-      url: 'NTFY_URL'
+      url: 'NTFY_URL',
+      username: 'NTFY_USERNAME',
+      password: 'NTFY_PASSWORD'
     }
   },
   cachePath: 'CACHE_PATH'

@@ -5,13 +5,13 @@ import { proxy } from 'hono/proxy'
 import { fetch } from 'undici'
 import cron from 'node-cron'
 
-import { config as config0 } from './lib/config.js'
+import { config } from './lib/config.js'
 import WolfApiClient from './lib/wolf/wolf-api-client.js'
 
 let startup = true
 let pairSecretCache: Array<string> = []
 
-const wolfApiClient = new WolfApiClient(config0.wolf.apiSocketPath)
+const wolfApiClient = new WolfApiClient(config.wolf.apiSocketPath)
 
 async function cronjob () {
   const pendingPairRequests = await wolfApiClient.getPendingPairRequests()
@@ -22,10 +22,24 @@ async function cronjob () {
         pairSecretCache.push(pairSecret)
         if (!startup) { // Don't send any notifications of pair requests created pre-startup
           console.log(Date.now(), ' - Sending ntfy for pair secret:', pairSecret)
-          await fetch(config0.handlers.ntfy.url, {
+          const pinUrl = `${config.baseUrl}/pin/#${pairSecret}`
+
+          const headers: HeadersInit = {
+            Title: 'Wolf - pending pairing request',
+            Tags: 'wolf',
+            Click: pinUrl,
+            Actions: `view, Open PIN Entry, ${pinUrl}, clear=true`
+          }
+
+          const { username, password } = config.handlers.ntfy
+          if (username && password) {
+            headers.Authorization = `Basic ${btoa(`${username}:${password}`)}`
+          }
+
+          await fetch(config.handlers.ntfy.url, {
             method: 'POST', // PUT works too
-            body: '🐺 Wolf pairing request',
-            headers: { Click: `${config0.baseUrl}/pin/#${pairSecret}` }
+            body: 'Enter PIN to finish pairing your client',
+            headers,
           })
         }
       }
@@ -40,27 +54,27 @@ async function cronjob () {
 const app = new Hono()
 
 app.get('/pin/', async (c) => {
-  const proxyRes = await proxy(`${config0.wolf.httpBaseUrl}/pin/`, { ...c.req })
+  const proxyRes = await proxy(`${config.wolf.httpBaseUrl}/pin/`, { ...c.req })
   proxyRes.headers.set('content-type', 'text/html; charset=utf-8')
   return proxyRes
 })
 
 app.post('/pin/', async (c) => {
-  return proxy(`${config0.wolf.httpBaseUrl}/pin/`, { ...c.req })
+  return proxy(`${config.wolf.httpBaseUrl}/pin/`, { ...c.req })
 })
 
 let cronTask: cron.ScheduledTask
 const server = serve({
   fetch: app.fetch,
-  port: config0.server.port,
-  hostname: config0.server.listen
+  port: config.server.port,
+  hostname: config.server.listen
 }, (info) => {
   console.log()
   console.log(`✅ Serving on ${info.family} ${info.address}:${info.port}`)
-  console.log(`🌐 Web server base URL: ${config0.baseUrl}`)
+  console.log(`🌐 Web server base URL: ${config.baseUrl}`)
   console.log()
 
-  cronTask = cron.schedule(config0.cronExpression, cronjob)
+  cronTask = cron.schedule(config.cronExpression, cronjob)
 })
 
 async function cleanup () {

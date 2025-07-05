@@ -6,7 +6,7 @@ docker run --rm \
   -v /var/run/wolf/wolf.sock:/var/run/wolf/wolf.sock \
   -v cache:/app/cache \
   -p 4000:4000 \
-  wolfnotify
+  ghcr.io/etiennek/wolfnotify:latest
 ```
 
 # Development
