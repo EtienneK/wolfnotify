@@ -10,7 +10,6 @@ FROM node:24-alpine
 
 ENV NODE_ENV=production
 ENV NODE_CONFIG_DIR=/config:/app/config
-ENV WOLF_HTTP_BASE_URL=http://host.docker.internal:47989
 
 RUN mkdir -p /config /app/config
 
