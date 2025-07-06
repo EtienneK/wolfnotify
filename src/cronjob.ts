@@ -2,11 +2,9 @@ import cron from 'node-cron'
 import WolfApiClient from './lib/wolf/wolf-api-client.js'
 import type { Config } from './lib/config.js'
 
-export default function createCronJob (config: Config): cron.ScheduledTask {
+export default function createCronJob (config: Config, wolfApiClient: WolfApiClient): cron.ScheduledTask {
   let startup = true
   let pairSecretCache: Array<string> = []
-
-  const wolfApiClient = new WolfApiClient(config.wolf.apiSocketPath)
 
   async function cronjob () {
     if (!wolfApiClient.socketExists()) {
@@ -22,7 +20,7 @@ export default function createCronJob (config: Config): cron.ScheduledTask {
           pairSecretCache.push(pairSecret)
           if (!startup) { // Don't send any notifications of pair requests created pre-startup
             console.log(Date.now(), ' - Sending ntfy for pair secret:', pairSecret)
-            const pinUrl = `${config.baseUrl}/pin/#${pairSecret}`
+            const pinUrl = `${config.baseUrl}/pin/${pairSecret}`
 
             const headers: HeadersInit = {
               Title: 'Wolf - pending pairing request',

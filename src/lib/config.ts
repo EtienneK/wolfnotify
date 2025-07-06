@@ -10,8 +10,7 @@ const ConfigSchema = z.object({
   }),
   cronExpression: z.string(),
   wolf: z.object({
-    apiSocketPath: z.string(),
-    httpBaseUrl: z.string().url()
+    apiSocketPath: z.string()
   }),
   handlers: z.object({
     ntfy: z.object({

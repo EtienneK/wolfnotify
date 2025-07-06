@@ -12,8 +12,7 @@ export default {
   },
   cronExpression: '*/3 * * * * *', // Every 3 seconds
   wolf: {
-    apiSocketPath: '/var/run/wolf/wolf.sock',
-    httpBaseUrl: 'http://localhost:47989'
+    apiSocketPath: '/var/run/wolf/wolf.sock'
   },
   handlers: {
     ntfy: {

@@ -5,8 +5,10 @@ import cron from 'node-cron'
 import { config } from './lib/config.js'
 import createApp from './app.js'
 import createCronJob from './cronjob.js'
+import WolfApiClient from './lib/wolf/wolf-api-client.js'
 
-const app = createApp(config)
+const wolfApiClient = new WolfApiClient(config.wolf.apiSocketPath)
+const app = createApp(config, wolfApiClient)
 
 let cronTask: cron.ScheduledTask
 const server = serve({
@@ -19,7 +21,7 @@ const server = serve({
   console.log(`🌐 Web server base URL: ${config.baseUrl}`)
   console.log()
 
-  cronTask = createCronJob(config)
+  cronTask = createCronJob(config, wolfApiClient)
 })
 
 async function cleanup () {

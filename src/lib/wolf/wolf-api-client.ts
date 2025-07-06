@@ -33,8 +33,7 @@ export default class WolfApiClient {
         'Content-Type': 'application/json'
       }
     }).then(res => res.json()) as Promise<
-      paths['/api/v1/pair/client']['post']['responses']['200']['content']['application/json']
-      | paths['/api/v1/pair/client']['post']['responses']['500']['content']['application/json']
+      paths['/api/v1/pair/client']['post']['responses']['500']['content']['application/json']
       >
   }
 }

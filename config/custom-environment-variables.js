@@ -6,8 +6,7 @@ export default {
   },
   cronExpression: 'CRON_EXPRESSION',
   wolf: {
-    apiSocketPath: 'WOLF_API_SOCKET_PATH',
-    httpBaseUrl: 'WOLF_HTTP_BASE_URL'
+    apiSocketPath: 'WOLF_API_SOCKET_PATH'
   },
   handlers: {
     ntfy: {
