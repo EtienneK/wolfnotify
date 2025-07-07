@@ -11,6 +11,8 @@ FROM node:24-alpine
 ENV NODE_ENV=production
 ENV NODE_CONFIG_DIR=/config:/app/config
 
+ENV CACHE_PATH=/app/cache
+
 RUN mkdir -p /config /app/config
 
 WORKDIR /app
