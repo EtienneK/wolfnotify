@@ -48,7 +48,7 @@ services:
     image: ghcr.io/etiennek/wolfnotify:latest
     restart: unless-stopped
     environment:
-      - BASE_URL=https://wolfnotify.example.local # This URL is the URL displayed in the push-message and is used to enter the PIN for pairing. Thus, replace this with a URL that is accessible to the device receiving the push-message; example `http://192.168.0.123:4000` if on local LAN.
+      - BASE_URL=https://wolfnotify.example.local # This URL is the URL displayed in the push-message and is used to enter the PIN for pairing. Thus, replace this with a URL that is accessible to the device receiving the push-message; example `http://192.168.0.123:4000` if on local LAN. **WARNING**: there is no access control for the PIN entry page, thus beware when exposing this to the internet.
     volumes:
       - /var/run/wolf:/var/run/wolf
       - cache:/app/cache
@@ -57,6 +57,8 @@ services:
   #########################################################
   # Example Wolf service configuration
   #   - change as required for your specific situation
+  #   - Make sure that the `WOLF_SOCKET_PATH` matches the
+  #     `WOLF_API_SOCKET_PATH` from WolfNotify
   wolf:
     image: ghcr.io/games-on-whales/wolf:stable
     environment:
@@ -115,7 +117,7 @@ The WolfNotify container can be further configured by passing in the following e
 
 | Environment variable | Description | Default Value |
 |---|---|---|
-| `BASE_URL` | This URL is the URL displayed in the push-message and is used to enter the PIN for pairing. Thus, replace this with a URL that is accessible to the device receiving the push-message; example `http://192.168.0.123:4000` if on local LAN. | <http://localhost:${SERVER_PORT}> |
+| `BASE_URL` | This URL is the URL displayed in the push-message and is used to enter the PIN for pairing. Thus, replace this with a URL that is accessible to the device receiving the push-message; example `http://192.168.0.123:4000` if on local LAN. **WARNING**: there is no access control for the PIN entry page, thus beware when exposing this to the internet. | <http://localhost:${SERVER_PORT}> |
 | `SERVER_PORT` | Port the webserver is listening on. | 4000 |
 | `SERVER_LISTEN` | Hostname the webserver is listening on. | 0.0.0.0 |
 | `CRON_EXPRESSION` | Cron expression for the polling job that checks for new Pending Pair Requests. Note, that unlike normal cron, this expression also supports seconds. Default is every 3 seconds. | */3 * * * * * |
