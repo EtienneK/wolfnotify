@@ -1,10 +1,9 @@
 import { serve } from '@hono/node-server'
-
 import cron from 'node-cron'
 
-import { config } from './lib/config.js'
-import createApp from './app.js'
+import createApp from './app/app.js'
 import createCronJob from './cronjob.js'
+import config from './lib/config.js'
 import WolfApiClient from './lib/wolf/wolf-api-client.js'
 
 const wolfApiClient = new WolfApiClient(config.wolf.apiSocketPath)
@@ -18,7 +17,6 @@ const server = serve({
 }, (info) => {
   console.log()
   console.log(`✅ Serving on ${info.family} ${info.address}:${info.port}`)
-  console.log(`🌐 Web server base URL: ${config.baseUrl}`)
   console.log()
 
   cronTask = createCronJob(config, wolfApiClient)

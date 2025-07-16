@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1
 FROM node:24-alpine AS build
 WORKDIR /app
 COPY package*.json ./
@@ -19,6 +18,10 @@ WORKDIR /app
 
 COPY --from=build /app/dist .
 COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/config/*.js ./config/
+COPY --from=build \
+  /app/config/custom-environment-variables.js  \
+  /app/config/default.js \
+  /app/config/production.js \
+  ./config/
 
-CMD ["node", "./index.js"]
+CMD ["node", "./server.js"]

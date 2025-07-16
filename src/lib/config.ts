@@ -1,9 +1,10 @@
 import nodeConfig from 'config'
 import { z } from 'zod'
-import type { DeepReadonly } from '../types/types.js'
+
+import type { DeepReadonly } from '../global.js'
 
 const ConfigSchema = z.object({
-  baseUrl: z.string().url(),
+  baseUrl: z.url(),
   server: z.object({
     port: z.number().int().positive(),
     listen: z.string(),
@@ -14,7 +15,7 @@ const ConfigSchema = z.object({
   }),
   handlers: z.object({
     ntfy: z.object({
-      url: z.string().url(),
+      url: z.url(),
       username: z.string().optional(),
       password: z.string().optional(),
     })
@@ -22,5 +23,8 @@ const ConfigSchema = z.object({
 })
 
 export type Config = DeepReadonly<z.infer<typeof ConfigSchema>>
+export type ServerConfig = Config['server']
 
-export const config = ConfigSchema.parse(nodeConfig.util.toObject()) as Config
+const config = ConfigSchema.parse(nodeConfig.util.toObject()) as Config
+
+export default config
