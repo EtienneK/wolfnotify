@@ -7,7 +7,7 @@ export default function createCronJob (config: Config, wolfApiClient: WolfApiCli
   let pairSecretCache: Array<string> = []
 
   async function cronjob () {
-    if (!wolfApiClient.socketExists()) {
+    if (!await wolfApiClient.socketExists()) {
       console.error(`Wolf socket '${wolfApiClient.socketPath}' not found. Is the Wolf container still starting up? Have you mounted the Wolf API socket?`)
       return
     }
@@ -35,7 +35,7 @@ export default function createCronJob (config: Config, wolfApiClient: WolfApiCli
             }
 
             await fetch(config.handlers.ntfy.url, {
-              method: 'POST', // PUT works too
+              method: 'POST',
               body: 'Enter PIN to finish pairing your client',
               headers,
             })

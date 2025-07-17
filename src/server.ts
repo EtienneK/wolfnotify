@@ -9,18 +9,6 @@ import WolfApiClient from './lib/wolf/wolf-api-client.js'
 const wolfApiClient = new WolfApiClient(config.wolf.apiSocketPath)
 const app = createApp(config, wolfApiClient)
 
-// const server = serve({
-//   fetch: app.fetch,
-//   port: config.server.port,
-//   hostname: config.server.listen
-// }, (info) => {
-//   console.log()
-//   console.log(`✅ Serving on ${info.family} ${info.address}:${info.port}`)
-//   console.log()
-
-//   cronTask = createCronJob(config, wolfApiClient)
-// })
-
 const server = Bun.serve({
   port: config.server.port,
   hostname: config.server.listen,
@@ -33,7 +21,7 @@ console.log()
 
 const cronTask: cron.ScheduledTask = createCronJob(config, wolfApiClient)
 
-async function cleanup () {
+function cleanup () {
   console.log('Cleaning up...')
   if (cronTask) cronTask.destroy()
   server.stop()
@@ -41,4 +29,5 @@ async function cleanup () {
 
 process.on('SIGINT', cleanup)
 process.on('SIGTERM', cleanup)
+process.on('beforeExit', cleanup)
 process.on('exit', cleanup)
