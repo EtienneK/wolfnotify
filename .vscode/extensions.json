@@ -3,6 +3,6 @@
     "dbaeumer.vscode-eslint",
     "styled-components.vscode-styled-components",
     "bierner.lit-html",
-    "vitest.explorer"
+    "oven.bun-vscode"
   ]
 }

@@ -1,5 +1,5 @@
 import { testClient } from 'hono/testing'
-import { describe, it, expect } from 'vitest' // Or your preferred test runner
+import { describe, it, expect } from 'bun:test'
 
 import createApp from './app.js'
 import config from '../lib/config.js'
