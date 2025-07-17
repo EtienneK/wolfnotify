@@ -21,6 +21,7 @@
     "zod": "^4.0.5"
   },
   "devDependencies": {
+    "@types/bun": "^1.2.18",
     "@types/node": "^24.0.14",
     "eslint": "^9.31.0",
     "neostandard": "^0.12.2",

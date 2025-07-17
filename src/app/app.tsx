@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { serveStatic } from '@hono/node-server/serve-static'
+import { serveStatic } from 'hono/bun'
 
 import type { Config } from '../lib/config.js'
 import AppLayout from './AppLayout.js'
