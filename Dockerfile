@@ -1,27 +1,40 @@
-FROM node:24-alpine AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
+# use the official Bun image
+# see all versions at https://hub.docker.com/r/oven/bun/tags
+FROM oven/bun:1 AS base
+WORKDIR /usr/src/app
+
+# install dependencies into temp directory
+# this will cache them and speed up future builds
+FROM base AS install
+RUN mkdir -p /temp/dev
+COPY package.json bun.lock /temp/dev/
+RUN cd /temp/dev && bun install --frozen-lockfile
+
+# install with --production (exclude devDependencies)
+RUN mkdir -p /temp/prod
+COPY package.json bun.lock /temp/prod/
+RUN cd /temp/prod && bun install --frozen-lockfile --production
+
+# copy node_modules from temp directory
+# then copy all (non-ignored) project files into the image
+FROM base AS prerelease
+COPY --from=install /temp/dev/node_modules node_modules
 COPY . .
-RUN npm run build
 
-FROM node:24-alpine
-
+# [optional] tests & build
 ENV NODE_ENV=production
-ENV NODE_CONFIG_DIR=/config:/app/config
+RUN bun test
+RUN bun run build
 
-ENV CACHE_PATH=/app/cache
+# copy production dependencies and source code into final image
+FROM base AS release
+ENV NODE_ENV=production
 
-RUN mkdir -p /config /app/config
+COPY --from=install /temp/prod/node_modules node_modules
+COPY --from=prerelease /usr/src/app/dist/index.js .
+COPY --from=prerelease /usr/src/app/package.json .
 
-WORKDIR /app
-
-COPY --from=build /app/dist .
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build \
-  /app/config/custom-environment-variables.js  \
-  /app/config/default.js \
-  /app/config/production.js \
-  ./config/
-
-CMD ["node", "./server.js"]
+# run the app
+# USER bun # TODO: don't run as root
+EXPOSE 3000/tcp
+ENTRYPOINT [ "bun", "run", "index.js" ]

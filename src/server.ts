@@ -23,9 +23,11 @@ const server = serve({
 })
 
 async function cleanup () {
+  console.log('Cleaning up...')
   if (cronTask) cronTask.destroy()
   server.close()
 }
 
 process.on('SIGINT', cleanup)
 process.on('SIGTERM', cleanup)
+process.on('exit', cleanup)
