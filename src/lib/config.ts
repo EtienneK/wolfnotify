@@ -51,7 +51,7 @@ const baseUrl = process.env.BASE_URL ?? `http://localhost:${serverPort}`
 const cronExpression = process.env.CRON_EXPRESSION ?? '*/3 * * * * *' // Every 3 seconds
 const wolfApiSocketPath = process.env.WOLF_API_SOCKET_PATH ?? '/var/run/wolf/wolf.sock'
 const cachePath = process.env.CACHE_PATH ?? './cache'
-const ntfyUrl = getNtfyUrl(cachePath)
+const ntfyUrl = process.env.NOTIFY_URL ?? getNtfyUrl(cachePath)
 const ntfyUsername = process.env.NTFY_USERNAME
 const ntfyPassword = process.env.NTFY_PASSWORD
 
