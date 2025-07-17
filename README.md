@@ -130,8 +130,8 @@ The WolfNotify container can be further configured by passing in the following e
 ## Development
 
 ```sh
-npm install
-npm run dev
+bun install
+bun run dev
 ```
 
 ```sh
