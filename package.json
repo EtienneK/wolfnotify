@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "NODE_ENV=development bun run --hot src/server.ts",
     "build": "mkdir -p dist && bun build src/server.ts --target bun > dist/index.js",
-    "start": "NODE_ENV=production node dist/server.js",
+    "start": "NODE_ENV=production bun run dist/server.js",
     "lint": "eslint",
     "lint:fix": "eslint --fix"
   },
