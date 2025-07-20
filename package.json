@@ -2,9 +2,11 @@
   "name": "wolfnotify-gen",
   "type": "module",
   "scripts": {
-    "dev": "NODE_ENV=development bun run --hot src/server.ts",
-    "build": "mkdir -p dist && bun build src/server.ts --target bun > dist/index.js",
-    "start": "NODE_ENV=production bun run dist/server.js",
+    "dev": "NODE_ENV=development tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "NODE_ENV=production node dist/server.js",
+    "test": "NODE_ENV=test vitest run",
+    "test:watch": "NODE_ENV=test vitest watch",
     "lint": "eslint",
     "lint:fix": "eslint --fix"
   },
@@ -14,14 +16,17 @@
     "htmx.org": "^2.0.6",
     "nanoid": "^5.1.5",
     "node-cron": "^4.2.1",
+    "undici": "^7.12.0",
     "zod": "^4.0.5"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.18",
-    "@types/node": "^24.0.14",
+    "@hono/node-server": "^1.17.1",
+    "@types/node": "^24.0.15",
     "eslint": "^9.31.0",
     "neostandard": "^0.12.2",
+    "tsx": "^4.20.3",
     "typed-htmx": "^0.3.1",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   }
 }
